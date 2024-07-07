@@ -119,6 +119,8 @@ DETOUR_EXIT_PLAY_COMMAND_HANDLER
 DETOUR_STOP_COMMAND_HANDLER
 	cmpi.b	#$12,D1									; For some reason, this command is also triggered after a fight.
 	beq		DO_NOT_STOP								; In this case, D1 is always $12 and we skip the stop command.
+	cmpi.b	#$17,(RAM_CURRENTLY_PLAYING_TRACK)		; For some reason, this command is triggered just after P2 joins during gameplay and the
+	beq		DO_NOT_STOP								; "player joined" track just started playing. So check for that song and skip the stop command.
 	move.w	#$1300,D1								; Move MD+ stop command into D1
 	jsr		WRITE_MD_PLUS_FUNCTION
 DO_NOT_STOP
